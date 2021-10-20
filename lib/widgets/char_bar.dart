@@ -4,8 +4,7 @@ class ChartBar extends StatelessWidget {
   final String day;
   final double amount;
   final double presentage;
-  final double sizeOfString;
-  ChartBar(this.day, this.amount, this.presentage, this.sizeOfString);
+  ChartBar(this.day, this.amount, this.presentage);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +12,7 @@ class ChartBar extends StatelessWidget {
       return Column(
         children: [
           Container(
-            height: constraints.maxHeight * sizeOfString,
+            height: constraints.maxHeight * 0.12,
             child: FittedBox(
               child: Text('Rs.${amount.toStringAsFixed(0)}'),
             ),
@@ -23,7 +22,7 @@ class ChartBar extends StatelessWidget {
           ),
           Container(
             height: constraints.maxHeight -
-                2 * constraints.maxHeight * sizeOfString -
+                2 * constraints.maxHeight * 0.12 -
                 constraints.maxHeight * 0.1,
             width: 20,
             child: Stack(
@@ -31,7 +30,7 @@ class ChartBar extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey, width: 1.0),
-                    color: Colors.blue,
+                    color: Colors.blue.shade300,
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
@@ -40,7 +39,7 @@ class ChartBar extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey, width: 1.0),
-                      color: Colors.yellow,
+                      color: Colors.yellow.shade400,
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -52,8 +51,11 @@ class ChartBar extends StatelessWidget {
             height: constraints.maxHeight * 0.05,
           ),
           Container(
-              height: constraints.maxHeight * sizeOfString,
-              child: FittedBox(child: Text('$day'))),
+            height: constraints.maxHeight * 0.12,
+            child: FittedBox(
+              child: Text('$day'),
+            ),
+          ),
         ],
       );
     });

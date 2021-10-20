@@ -1,14 +1,12 @@
-import 'package:daily_transaction/widgets/adaptive_flat_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-class NewTransaction extends StatefulWidget {
-  //NewTransaction({Key key}) : super(key: key);
-  final Function addTx;
-  NewTransaction(this.addTx);
+import '../providers/TxProvider.dart';
+import '../widgets/adaptive_flat_button.dart';
 
+class NewTransaction extends StatefulWidget {
   @override
   _NewTransactionState createState() => _NewTransactionState();
 }
@@ -23,10 +21,16 @@ class _NewTransactionState extends State<NewTransaction> {
     final entertitle = titlecontroller.text;
     final enterprice = double.parse(pricecontroller.text);
     if (entertitle.isEmpty || enterprice <= 0 || _selectedDate == null) return;
-    widget.addTx(
+    Provider.of<TxProvider>(context, listen: false).addTransaction(
       entertitle,
       enterprice,
-      _selectedDate,
+      _selectedDate.add(
+        Duration(
+          hours: DateTime.now().hour,
+          minutes: DateTime.now().minute,
+          seconds: DateTime.now().second,
+        ),
+      ),
     );
     Navigator.of(context).pop();
   }
@@ -62,13 +66,11 @@ class _NewTransactionState extends State<NewTransaction> {
               TextField(
                 decoration: InputDecoration(labelText: "Title"),
                 controller: titlecontroller,
-                onSubmitted: (_) => submitData(),
               ),
               TextField(
                 decoration: InputDecoration(labelText: "Price"),
                 controller: pricecontroller,
                 keyboardType: TextInputType.number,
-                onSubmitted: (_) => submitData(),
               ),
               Container(
                 width: double.infinity,
