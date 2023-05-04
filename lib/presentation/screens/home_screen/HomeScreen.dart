@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 import '../widgets/transaction_list.dart';
 import '../widgets/new_transaction.dart';
 import '../widgets/chart.dart';
 
-class MyHomeScreen extends StatefulWidget {
-  @override
-  _MyHomeScreenState createState() => _MyHomeScreenState();
-}
-
-class _MyHomeScreenState extends State<MyHomeScreen> {
+class MyHomeScreen extends StatelessWidget {
   void _startNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
       context: ctx,

@@ -1,10 +1,9 @@
+import 'package:daily_transaction/logic/bloc/transaction_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import '../providers/TxProvider.dart';
-import '../widgets/adaptive_flat_button.dart';
+import 'adaptive_flat_button.dart';
 
 class NewTransaction extends StatefulWidget {
   @override
@@ -21,17 +20,19 @@ class _NewTransactionState extends State<NewTransaction> {
     final entertitle = titlecontroller.text;
     final enterprice = double.parse(pricecontroller.text);
     if (entertitle.isEmpty || enterprice <= 0 || _selectedDate == null) return;
-    Provider.of<TxProvider>(context, listen: false).addTransaction(
-      entertitle,
-      enterprice,
-      _selectedDate.add(
-        Duration(
-          hours: DateTime.now().hour,
-          minutes: DateTime.now().minute,
-          seconds: DateTime.now().second,
-        ),
-      ),
-    );
+    context.read<TransactionBloc>().add(
+          AddTransaction(
+            entertitle,
+            enterprice,
+            _selectedDate.add(
+              Duration(
+                hours: DateTime.now().hour,
+                minutes: DateTime.now().minute,
+                seconds: DateTime.now().second,
+              ),
+            ),
+          ),
+        );
     Navigator.of(context).pop();
   }
 
