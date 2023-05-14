@@ -21,7 +21,7 @@ class _NewTransactionState extends State<NewTransaction> {
     final enterprice = double.parse(pricecontroller.text);
     if (entertitle.isEmpty || enterprice <= 0 || _selectedDate == null) return;
     context.read<TransactionBloc>().add(
-          AddTransaction(
+          AddTransactionEvent(
             entertitle,
             enterprice,
             _selectedDate.add(

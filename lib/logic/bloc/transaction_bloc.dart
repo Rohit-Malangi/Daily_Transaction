@@ -9,42 +9,40 @@ part 'transaction_event.dart';
 part 'transaction_state.dart';
 
 class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
-  TransactionBloc() : super(TransactionInitial([])) {
-    on<AllTransaction>((event, emit) async {
+  TransactionBloc() : super(TransactionInitial()) {
+    on<AllTransactionEvent>((event, emit) async {
       try {
         await TxProvider()
             .alltransaction
-            .then((value) => emit(TransactionAll(value)));
+            .then((value) => emit(TransactionAllState(value)));
       } catch (e) {
-        emit(TransactionError([]));
+        emit(TransactionErrorState(e.toString()));
       }
     });
 
-    on<AddTransaction>((event, emit) async {
+    on<AddTransactionEvent>((event, emit) async {
       try {
         await TxProvider()
             .addTransaction(event.title, event.price, event.chosenDate)
-            .then((int id) {
-          state.list.add(Transaction(
-              name: event.title,
-              price: event.price,
-              date: event.chosenDate,
-              id: id));
-          emit(TransactionAdd(state.list));
+            .then((int id) async {
+          await TxProvider()
+              .alltransaction
+              .then((value) => emit(TransactionAllState(value)));
         });
       } catch (e) {
-        emit(TransactionError([]));
+        emit(TransactionErrorState(e.toString()));
       }
     });
 
-    on<DeleteTransaction>((event, emit) async {
+    on<DeleteTransactionEvent>((event, emit) async {
       try {
-        await TxProvider().deleteTransaction(event.id).then((value) {
-          state.list.removeWhere((element) => element.id == event.id);
-          emit(TransactionDelete(state.list));
+        await TxProvider().deleteTransaction(event.id).then((value) async {
+          await TxProvider()
+              .alltransaction
+              .then((value) => emit(TransactionAllState(value)));
         });
       } catch (e) {
-        emit(TransactionError([]));
+        emit(TransactionErrorState(e.toString()));
       }
     });
   }

@@ -9,15 +9,14 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {
-          print('state is $state');
       if (state is TransactionInitial) {
         return Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator.adaptive(),
         );
-      } else if (state is TransactionAll ||
-          state is TransactionAdd ||
-          state is TransactionDelete) {
-        return state.list.isEmpty
+      }
+      if (state is TransactionAllState) {
+        final list = state.list;
+        return list.isEmpty
             ? Expanded(
               child: Center(
                   child: Container(
@@ -46,25 +45,25 @@ class TransactionList extends StatelessWidget {
                               padding: const EdgeInsets.all(6.0),
                               child: FittedBox(
                                 child: Text(
-                                  'Rs. ${state.list[index].price.toStringAsFixed(0)}',
+                                  'Rs. ${list[index].price.toStringAsFixed(0)}',
                                 ),
                               ),
                             ),
                           ),
                           title: Text(
-                            state.list[index].name,
+                            list[index].name,
                             style: TextStyle(fontStyle: FontStyle.italic),
                           ),
                           subtitle: Text(
-                            DateFormat.yMMMd().format(state.list[index].date),
+                            DateFormat.yMMMd().format(list[index].date),
                             style: TextStyle(color: Colors.grey),
                           ),
                           trailing: MediaQuery.of(context).size.width > 400
                               ? TextButton.icon(
                                   onPressed: () => context
                                       .read<TransactionBloc>()
-                                      .add(DeleteTransaction(
-                                          state.list[index].id)),
+                                      .add(DeleteTransactionEvent(
+                                          list[index].id)),
                                   icon: Icon(Icons.delete),
                                   label: const Text(
                                     "Delete",
@@ -78,21 +77,23 @@ class TransactionList extends StatelessWidget {
                                   icon: const Icon(Icons.delete),
                                   onPressed: () => context
                                       .read<TransactionBloc>()
-                                      .add(DeleteTransaction(
-                                          state.list[index].id)),
+                                      .add(DeleteTransactionEvent(
+                                          list[index].id)),
                                 ),
                         ),
                       );
                     },
-                    itemCount: state.list.length,
+                    itemCount: list.length,
                   ),
                 ),
               );
-      } else {
+      }
+      if(state is TransactionErrorState){
+        final error = state.error;
         return Center(
           child: Container(
-            child: const Text(
-              "Unknown Error Occured...",
+            child: Text(
+              "$error...",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
@@ -101,6 +102,7 @@ class TransactionList extends StatelessWidget {
           ),
         );
       }
+      return null;
     });
   }
 }

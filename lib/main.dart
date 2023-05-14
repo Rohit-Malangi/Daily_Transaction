@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TransactionBloc()..add(AllTransaction()),
+      create: (context) => TransactionBloc()..add(AllTransactionEvent()),
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Daily Transactions',

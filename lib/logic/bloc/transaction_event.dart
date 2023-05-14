@@ -3,18 +3,18 @@ part of 'transaction_bloc.dart';
 @immutable
 abstract class TransactionEvent {}
 
-class AllTransaction extends TransactionEvent {}
+class AllTransactionEvent extends TransactionEvent {}
 
-class AddTransaction extends TransactionEvent {
+class AddTransactionEvent extends TransactionEvent {
   final String title;
   final num price;
   final DateTime chosenDate;
-  
-  AddTransaction(this.title, this.price, this.chosenDate);
+
+  AddTransactionEvent(this.title, this.price, this.chosenDate);
 }
 
-class DeleteTransaction extends TransactionEvent {
+class DeleteTransactionEvent extends TransactionEvent {
   final num id;
 
-  DeleteTransaction(this.id);
+  DeleteTransactionEvent(this.id);
 }
